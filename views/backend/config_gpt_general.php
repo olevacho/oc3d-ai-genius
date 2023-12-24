@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
 $wp_nonce = wp_create_nonce(OC3DAIG_PREFIX_SHORT . 'config_nonce');
 $menu_page = OC3DAIG_PREFIX_LOW . 'settings';
 $p_types = get_post_types();
@@ -29,7 +32,7 @@ $models = [];
     <div class="inside">
         <div class="oc3daig_config_items_wrapper">
             <form action="" method="post" id="oc3daig_gen_form">    
-                <input type="hidden" name="<?php echo OC3DAIG_PREFIX_SHORT ?>config_nonce" value="<?php echo $wp_nonce; ?>"/>
+                <input type="hidden" name="<?php echo OC3DAIG_PREFIX_SHORT ?>config_nonce" value="<?php echo esc_html($wp_nonce); ?>"/>
                 <input type="hidden" name="action" value="oc3d_store_general_tab"/>
                 <div class="oc3daig_block_content">
 
@@ -61,7 +64,7 @@ $models = [];
                                     <div  class="oc3daig_row_content oc3daig_pr">
                                         <div  style="position:relative;">
 
-                                            <input type="text"  name="oc3daig_open_ai_gpt_key"   id="oc3daig_open_ai_gpt_key"  value="<?php echo $oc3daig_open_ai_gpt_key; ?>">
+                                            <input type="text"  name="oc3daig_open_ai_gpt_key"   id="oc3daig_open_ai_gpt_key"  value="<?php echo esc_html($oc3daig_open_ai_gpt_key); ?>">
                                         </div>
                                         <p class="oc3daig_input_description">
                                             <span style="display: inline;">
@@ -80,7 +83,7 @@ $models = [];
 
                                             <input class="oc3daig_input oc3daig_20pc"  name="oc3daig_connection_timeout"  id="oc3daig_connection_timeout"  type="number" 
                                                    step="1" min="1" max="100" maxlength="3" autocomplete="off"  
-                                                   placeholder="<?php esc_html_e('Connection Timeout', 'oc3d-ai-genius'); ?>" value="<?php echo $connection_timeout; ?>">
+                                                   placeholder="<?php esc_html_e('Connection Timeout', 'oc3d-ai-genius'); ?>" value="<?php echo (int) $connection_timeout; ?>">
 
                                         </div>
                                         <p class="oc3daig_input_description">
@@ -102,7 +105,7 @@ $models = [];
 
                                             <input class="oc3daig_input oc3daig_20pc"  name="oc3daig_response_timeout"  id="oc3daig_response_timeout" type="number" 
                                                    step="1"  max="200" maxlength="3" autocomplete="off"  
-                                                   placeholder="<?php esc_html_e('Response Timeout', 'oc3d-ai-genius'); ?>" value="<?php echo $response_timeout; ?>">
+                                                   placeholder="<?php esc_html_e('Response Timeout', 'oc3d-ai-genius'); ?>" value="<?php echo (int)$response_timeout; ?>">
 
                                         </div>
                                         <p class="oc3daig_input_description">
@@ -124,7 +127,7 @@ $models = [];
 
                                             <input class="oc3daig_input oc3daig_20pc"  name="oc3daig_max_tokens"  id="oc3daig_max_tokens" type="number" 
                                                    step="1" maxlength="4" autocomplete="off"  
-                                                   placeholder="<?php esc_html_e('Max tokens', 'oc3d-ai-genius'); ?>" value="<?php echo $max_tokens; ?>">
+                                                   placeholder="<?php esc_html_e('Max tokens', 'oc3d-ai-genius'); ?>" value="<?php echo (int)$max_tokens; ?>">
 
                                         </div>
                                         <p class="oc3daig_input_description">
@@ -147,7 +150,7 @@ $models = [];
                                             <input class="oc3daig_input oc3daig_20pc"  name="oc3daig_count_of_instructions"  
                                                    id="oc3daig_count_of_instructions" type="number" 
                                                    step="1" min="5" maxlength="3" autocomplete="off"  
-                                                   placeholder="<?php esc_html_e('Max tokens', 'oc3d-ai-genius'); ?>" value="<?php echo $count_of_instructions; ?>">
+                                                   placeholder="<?php esc_html_e('Max tokens', 'oc3d-ai-genius'); ?>" value="<?php echo (int)$count_of_instructions; ?>">
 
                                         </div>
                                         <p class="oc3daig_input_description">
@@ -186,8 +189,8 @@ $models = [];
                                                 }
                                                 ?>
                                                 <div class="oc3daig_c_opt">
-                                                    <input type="checkbox" id="<?php echo $p_t; ?>" name="<?php echo "oc3daig_ptypes[" . $p_t; ?>]" <?php echo $checked; ?>  >
-                                                    <label for="<?php echo $p_t; ?>"><?php echo $p_t; ?></label>
+                                                    <input type="checkbox" id="<?php echo esc_html($p_t); ?>" name="<?php echo "oc3daig_ptypes[" . esc_html($p_t); ?>]" <?php echo esc_html($checked); ?>  >
+                                                    <label for="<?php echo esc_html($p_t); ?>"><?php echo esc_html($p_t); ?></label>
                                                 </div>
                                                 <?php
                                             }

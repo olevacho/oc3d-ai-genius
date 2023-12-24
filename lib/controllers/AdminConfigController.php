@@ -29,7 +29,7 @@ if (!class_exists('Oc3dAig_AdminConfigController')) {
                 return false;
             }
 
-            $settings_hook = add_submenu_page(OC3DAIG_PREFIX_LOW . 'settings', __('Settings', OC3DAIG_TEXT_DOMAIN), __('Settings', OC3DAIG_TEXT_DOMAIN), 'edit_posts', OC3DAIG_PREFIX_LOW . 'settings', [$this, 'showSettings']);
+            $settings_hook = add_submenu_page(OC3DAIG_PREFIX_LOW . 'image', __('Settings', OC3DAIG_TEXT_DOMAIN), __('Settings', OC3DAIG_TEXT_DOMAIN), 'edit_posts', OC3DAIG_PREFIX_LOW . 'settings', [$this, 'showSettings']);
 
             add_action('load-' . $settings_hook, [$this, 'processSettingsSubmit']);
         }
@@ -62,7 +62,7 @@ if (!class_exists('Oc3dAig_AdminConfigController')) {
 
             //if (isset($_POST[OC3DAIG_PREFIX_LOW . 'ptypes'])) {
             $p_types = get_post_types();
-            $selected_post_types = isset($_POST[OC3DAIG_PREFIX_LOW . 'ptypes']) ? array_keys($_POST[OC3DAIG_PREFIX_LOW . 'ptypes']) : [];
+            $selected_post_types = isset($_POST[OC3DAIG_PREFIX_LOW . 'ptypes']) ? array_map('sanitize_key',array_keys($_POST[OC3DAIG_PREFIX_LOW . 'ptypes'])) : [];
             $ptres = [];
             foreach ($selected_post_types as $pt) {
                 if (in_array($pt, $p_types)) {

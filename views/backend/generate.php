@@ -1,4 +1,8 @@
-<?php ?>
+<?php 
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+?>
 <div id="oc3daig-tabs-3" class="oc3daig_tab_panel"  data-oc3daig="2">
     <h3><?php esc_html_e('Expert', 'oc3d-ai-genius'); ?></h3>
     <div class="oc3daig_form_row">
@@ -15,9 +19,9 @@
                         <select id="oc3daig_model_e" name="oc3daig_model_e" class="oc3daig_selection">
 <?php
 foreach ($expert_models as $ei => $em) {
-    $em_esc = wp_kses($em, Oc3dAig_Utils::getInstructionAllowedTags());
+
     ?>
-                                <option value="<?php echo $em_esc; ?>"><?php echo $em_esc; ?></option>
+                                <option value="<?php echo wp_kses($em, Oc3dAig_Utils::getInstructionAllowedTags()); ?>"><?php echo wp_kses($em, Oc3dAig_Utils::getInstructionAllowedTags()); ?></option>
                                 <?php
                             }
                             ?>
@@ -30,7 +34,7 @@ foreach ($expert_models as $ei => $em) {
                     </td>
                     <td id="newmetaleft" class="oc3daig_td">
                         <label for="oc3daig_max_tokens_e" class="oc3daig_lbl oc3daig_block"><?php esc_html_e('Maximum length', 'oc3d-ai-genius'); ?></label>
-                        <input class="oc3daig_input oc3daig_select_ch" id="oc3daig_max_tokens_e" name="oc3daig_max_tokens_e" type="number" step="1"  value="<?php echo $mx_tokens; ?>" maxlength="3" autocomplete="off"  >
+                        <input class="oc3daig_input oc3daig_select_ch" id="oc3daig_max_tokens_e" name="oc3daig_max_tokens_e" type="number" step="1"  value="<?php echo (int)$mx_tokens; ?>" maxlength="3" autocomplete="off"  >
 
                     </td>
 

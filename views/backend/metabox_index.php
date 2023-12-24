@@ -1,4 +1,8 @@
-<?php ?>
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+?>
 <script>
     let oc3daig_copy_clipboard_sucess = '<?php esc_html_e('Copying to clipboard was successful!', 'oc3d-ai-genius'); ?>';
     let oc3daig_copy_clipboard_fail = '<?php esc_html_e('Could not copy text', 'oc3d-ai-genius'); ?>';
@@ -47,7 +51,7 @@
                 console.log('error = can not find active panel ');
                 return;
             }
-            let oc3ddata = {'oc3d_gpt_nonce': "<?php echo wp_create_nonce('oc3d_gpt_nonce'); ?>"};
+            let oc3ddata = {'oc3d_gpt_nonce': "<?php echo esc_html(wp_create_nonce('oc3d_gpt_nonce')); ?>"};
             switch (oc3d_active_panel) {
                 case '1':
                     oc3ddata['action'] = 'oc3d_gpt_correct';

@@ -4,10 +4,11 @@ if (!class_exists('Oc3dAig_AdminController')) {
 
     class Oc3dAig_AdminController extends Oc3dAig_BaseController {
 
-        const ADMIN_MENU = OC3DAIG_PREFIX_LOW . 'settings'; //
+        const ADMIN_MENU = OC3DAIG_PREFIX_LOW . 'image';//'settings'; //
         const ADMIN_MENU_CALLBACK = null; //can be view file or some callback function
 
         public $config_controller = false;
+        public $image_controller = false;
         
         public $admlogo = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjMiIGhlaWdodD0iMTMiIHZpZXdCb3g9IjAgMCAyMyAxMyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTcuMjg2OTIgMy44MTgxOEM3LjIyMyAzLjI3ODQxIDYuOTYzNzcgMi44NTkzNyA2LjUwOTIyIDIuNTYxMDhDNi4wNTQ2OCAyLjI2Mjc4IDUuNDk3MTUgMi4xMTM2MyA0LjgzNjY0IDIuMTEzNjNDNC4zNTM2OSAyLjExMzYzIDMuOTMxMSAyLjE5MTc2IDMuNTY4ODggMi4zNDgwMUMzLjIxMDIyIDIuNTA0MjYgMi45Mjk2OCAyLjcxOTEgMi43MjcyNiAyLjk5MjU0QzIuNTI4NCAzLjI2NTk4IDIuNDI4OTcgMy41NzY3IDIuNDI4OTcgMy45MjQ3MUMyLjQyODk3IDQuMjE1OSAyLjQ5ODIyIDQuNDY2MjYgMi42MzY3MSA0LjY3NTc4QzIuNzc4NzYgNC44ODE3NCAyLjk1OTg2IDUuMDUzOTcgMy4xODAwMyA1LjE5MjQ3QzMuNDAwMiA1LjMyNzQxIDMuNjMxMDMgNS40MzkyNyAzLjg3MjUxIDUuNTI4MDVDNC4xMTM5OCA1LjYxMzI4IDQuMzM1OTMgNS42ODI1MiA0LjUzODM0IDUuNzM1NzlMNS42NDYzIDYuMDM0MDlDNS45MzAzOSA2LjEwODY2IDYuMjQ2NDQgNi4yMTE2NCA2LjU5NDQ1IDYuMzQzMDRDNi45NDYwMSA2LjQ3NDQzIDcuMjgxNiA2LjY1Mzc2IDcuNjAxMiA2Ljg4MTAzQzcuOTI0MzUgNy4xMDQ3NSA4LjE5MDY5IDcuMzkyNCA4LjQwMDIxIDcuNzQzOTZDOC42MDk3MiA4LjA5NTUyIDguNzE0NDggOC41MjY5OCA4LjcxNDQ4IDkuMDM4MzVDOC43MTQ0OCA5LjYyNzg0IDguNTYwMDEgMTAuMTYwNSA4LjI1MTA2IDEwLjYzNjRDNy45NDU2NiAxMS4xMTIyIDcuNDk4MjIgMTEuNDkwNCA2LjkwODczIDExLjc3MDlDNi4zMjI3OSAxMi4wNTE1IDUuNjEwNzkgMTIuMTkxOCA0Ljc3MjcyIDEyLjE5MThDMy45OTE0NyAxMi4xOTE4IDMuMzE0OTggMTIuMDY1NyAyLjc0MzI0IDExLjgxMzZDMi4xNzUwNiAxMS41NjE0IDEuNzI3NjIgMTEuMjA5OSAxLjQwMDkyIDEwLjc1ODlDMS4wNzc3NiAxMC4zMDc5IDAuODk0ODc4IDkuNzg0MDkgMC44NTIyNjQgOS4xODc1SDIuMjE1OUMyLjI1MTQxIDkuNTk5NDMgMi4zODk5MSA5Ljk0MDM0IDIuNjMxMzggMTAuMjEwMkMyLjg3NjQxIDEwLjQ3NjYgMy4xODUzNiAxMC42NzU0IDMuNTU4MjMgMTAuODA2OEMzLjkzNDY1IDEwLjkzNDcgNC4zMzk0OCAxMC45OTg2IDQuNzcyNzIgMTAuOTk4NkM1LjI3Njk4IDEwLjk5ODYgNS43Mjk3NSAxMC45MTY5IDYuMTMxMDMgMTAuNzUzNUM2LjUzMjMxIDEwLjU4NjYgNi44NTAxMyAxMC4zNTU4IDcuMDg0NTEgMTAuMDYxMUM3LjMxODg4IDkuNzYyNzggNy40MzYwNyA5LjQxNDc3IDcuNDM2MDcgOS4wMTcwNEM3LjQzNjA3IDguNjU0ODMgNy4zMzQ4NiA4LjM2MDA4IDcuMTMyNDUgOC4xMzI4MUM2LjkzMDAzIDcuOTA1NTQgNi42NjM3IDcuNzIwODggNi4zMzM0NCA3LjU3ODgzQzYuMDAzMTkgNy40MzY3OSA1LjY0NjMgNy4zMTI1IDUuMjYyNzggNy4yMDU5NkwzLjkyMDQ1IDYuODIyNDRDMy4wNjgxNyA2LjU3NzQxIDIuMzkzNDYgNi4yMjc2MiAxLjg5NjMgNS43NzMwOEMxLjM5OTE0IDUuMzE4NTMgMS4xNTA1NiA0LjcyMzcyIDEuMTUwNTYgMy45ODg2M0MxLjE1MDU2IDMuMzc3ODQgMS4zMTU2OSAyLjg0NTE3IDEuNjQ1OTQgMi4zOTA2MkMxLjk3OTc1IDEuOTMyNTIgMi40MjcxOSAxLjU3NzQxIDIuOTg4MjcgMS4zMjUyOEMzLjU1MjkgMS4wNjk2IDQuMTgzMjMgMC45NDE3NTcgNC44NzkyNSAwLjk0MTc1N0M1LjU4MjM4IDAuOTQxNzU3IDYuMjA3MzggMS4wNjc4MiA2Ljc1NDI1IDEuMzE5OTVDNy4zMDExMyAxLjU2ODUzIDcuNzM0MzcgMS45MDk0NCA4LjA1Mzk3IDIuMzQyNjhDOC4zNzcxMiAyLjc3NTkyIDguNTQ3NTggMy4yNjc3NSA4LjU2NTMzIDMuODE4MThINy4yODY5MloiIGZpbGw9IiNGRjA2MDYiLz4KPHBhdGggZD0iTTE1LjMyMSAxMlYxLjA5MDkxSDE5LjEzNDlDMTkuODk0OSAxLjA5MDkxIDIwLjUyMTcgMS4yMjIzIDIxLjAxNTMgMS40ODUwOEMyMS41MDg5IDEuNzQ0MzEgMjEuODc2NCAyLjA5NDEgMjIuMTE3OSAyLjUzNDQ0QzIyLjM1OTQgMi45NzEyMyAyMi40ODAxIDMuNDU1OTYgMjIuNDgwMSAzLjk4ODYzQzIyLjQ4MDEgNC40NTczOCAyMi4zOTY3IDQuODQ0NDYgMjIuMjI5NyA1LjE0OTg1QzIyLjA2NjQgNS40NTUyNSAyMS44NDk4IDUuNjk2NzMgMjEuNTc5OSA1Ljg3NDI5QzIxLjMxMzYgNi4wNTE4NCAyMS4wMjQxIDYuMTgzMjMgMjAuNzExNiA2LjI2ODQ2VjYuMzc1QzIxLjA0NTQgNi4zOTYzIDIxLjM4MSA2LjUxMzQ5IDIxLjcxODQgNi43MjY1NkMyMi4wNTU3IDYuOTM5NjMgMjIuMzM4MSA3LjI0NTAyIDIyLjU2NTMgNy42NDI3NUMyMi43OTI2IDguMDQwNDggMjIuOTA2MiA4LjUyNjk4IDIyLjkwNjIgOS4xMDIyN0MyMi45MDYyIDkuNjQ5MTQgMjIuNzgyIDEwLjE0MSAyMi41MzM0IDEwLjU3NzhDMjIuMjg0OCAxMS4wMTQ2IDIxLjg5MjQgMTEuMzYwOCAyMS4zNTYyIDExLjYxNjVDMjAuODE5OSAxMS44NzIyIDIwLjEyMjIgMTIgMTkuMjYyOCAxMkgxNS4zMjFaTTE2LjY0MiAxMC44MjgxSDE5LjI2MjhDMjAuMTI1NyAxMC44MjgxIDIwLjczODMgMTAuNjYxMiAyMS4xMDA1IDEwLjMyNzRDMjEuNDY2MyA5Ljk5MDA1IDIxLjY0OTEgOS41ODE2NyAyMS42NDkxIDkuMTAyMjdDMjEuNjQ5MSA4LjczMjk1IDIxLjU1NSA4LjM5MjA0IDIxLjM2NjggOC4wNzk1NEMyMS4xNzg2IDcuNzYzNDkgMjAuOTEwNSA3LjUxMTM2IDIwLjU2MjUgNy4zMjMxNUMyMC4yMTQ1IDcuMTMxMzkgMTkuODAyNSA3LjAzNTUxIDE5LjMyNjcgNy4wMzU1MUgxNi42NDJWMTAuODI4MVpNMTYuNjQyIDUuODg0OTRIMTkuMDkyM0MxOS40OSA1Ljg4NDk0IDE5Ljg0ODcgNS44MDY4MSAyMC4xNjgzIDUuNjUwNTZDMjAuNDkxNSA1LjQ5NDMxIDIwLjc0NzIgNS4yNzQxNCAyMC45MzU0IDQuOTkwMDVDMjEuMTI3MSA0LjcwNTk2IDIxLjIyMyA0LjM3MjE2IDIxLjIyMyAzLjk4ODYzQzIxLjIyMyAzLjUwOTIzIDIxLjA1NjEgMy4xMDI2MiAyMC43MjIzIDIuNzY4ODJDMjAuMzg4NSAyLjQzMTQ2IDE5Ljg1OTQgMi4yNjI3OCAxOS4xMzQ5IDIuMjYyNzhIMTYuNjQyVjUuODg0OTRaIiBmaWxsPSIjRkUwNzA3Ii8+CjxwYXRoIGQ9Ik0xMS44Mzg4IDlMMTEuMzQ2NiA4LjUxNDJMMTMuMzcyOSA2LjQ4NzkySDguMTI0OTlWNS43ODQ4SDEzLjM3MjlMMTEuMzQ2NiAzLjc2NDkxTDExLjgzODggMy4yNzI3MkwxNC43MDI0IDYuMTM2MzZMMTEuODM4OCA5WiIgZmlsbD0iYmxhY2siLz4KPC9zdmc+';
 
@@ -17,6 +18,12 @@ if (!class_exists('Oc3dAig_AdminController')) {
                 include_once $contr_path;
             }
             $this->config_controller = new Oc3dAig_AdminConfigController();
+            if (!class_exists('Oc3dAig_AdminImageController')) {
+                $contr_path = OC3DAIG_PATH . "/lib/controllers/AdminImageController.php";
+                include_once $contr_path;
+            }
+            $this->image_controller = new Oc3dAig_AdminImageController();
+            
             add_action('admin_menu', array($this, 'registerAdminMenu'));
 
             add_action('add_meta_boxes', [$this, 'addChatMetaBox']);
@@ -84,7 +91,7 @@ if (!class_exists('Oc3dAig_AdminController')) {
                 require_once OC3DAIG_PATH . '/lib/helpers/AiRequest.php';
             }
             $data = [];
-            $mod_id = $_POST['model'];
+            $mod_id = sanitize_text_field($_POST['model']);
             $models_allowed = Oc3dAig_Utils::getEditModelTexts();
             if (!in_array($mod_id, $models_allowed)) {
                 $r['result'] = 5;
@@ -92,7 +99,7 @@ if (!class_exists('Oc3dAig_AdminController')) {
                 wp_send_json($r);
             }
             $data['model'] = $mod_id;
-            $data['instruction'] = $_POST['instruction'];
+            $data['instruction'] = sanitize_text_field($_POST['instruction']);
             if (strlen($data['instruction']) == 0) {
                 $r['result'] = 6;
                 $r['msg'] = __('Instruction is empty');
@@ -102,7 +109,7 @@ if (!class_exists('Oc3dAig_AdminController')) {
 
             $data['temperature'] = is_numeric($_POST['temperature']) ? floatval($_POST['temperature']) : 1;
 
-            $data['text'] = $_POST['text'];
+            $data['text'] = sanitize_text_field($_POST['text']);
 
             $res = Oc3dAig_AiRequest::sendChatGptEdit($data);
 
@@ -166,7 +173,7 @@ if (!class_exists('Oc3dAig_AdminController')) {
                 require_once OC3DAIG_PATH . '/lib/helpers/AiRequest.php';
             }
             $data = [];
-            $mod_id = $_POST['model'];
+            $mod_id = sanitize_text_field($_POST['model']);
             $models_allowed = Oc3dAig_Utils::getExpertModelTexts();
             if (!in_array($mod_id, $models_allowed)) {
                 $r['result'] = 5;
@@ -184,11 +191,11 @@ if (!class_exists('Oc3dAig_AdminController')) {
             $data['presence_penalty'] = is_numeric($_POST['presence_penalty']) ? floatval($_POST['presence_penalty']) : 0;
             $data['frequency_penalty'] = is_numeric($_POST['frequency_penalty']) ? floatval($_POST['frequency_penalty']) : 0;
 
-            $data['system'] = $_POST['system'];
+            $data['system'] = sanitize_text_field($_POST['system']);
             $messages = [];
             if (isset($_POST['actors']) && is_array($_POST['actors']) && isset($_POST['msgs']) && is_array($_POST['msgs'])) {
-                $actors = $_POST['actors'];
-                $msgs = $_POST['msgs'];
+                $actors = array_map('sanitize_text_field', $_POST['actors']);
+                $msgs = array_map('sanitize_text_field', $_POST['msgs']);
 
                 if (count($actors) > 0 && count($actors) == count($msgs)) {
                     foreach ($actors as $idx => $actor) {
@@ -225,7 +232,7 @@ if (!class_exists('Oc3dAig_AdminController')) {
         }
 
         function enqueueStyles() {
-            //https://code.jquery.com/ui/1.13.1/themes/smoothness/jquery-ui.css
+
             $screen = get_current_screen();
 
             $selected_p_types = unserialize(get_option(OC3DAIG_PREFIX_LOW . 'selected_types'));
@@ -234,7 +241,7 @@ if (!class_exists('Oc3dAig_AdminController')) {
                 $selected_p_types = ['post', 'page'];
             }
 
-            if (in_array($screen->id, $selected_p_types) || strpos($screen->id, 'oc3daig_settings') !== false) {
+            if (in_array($screen->id, $selected_p_types) || strpos($screen->id, 'oc3daig_settings') !== false || strpos($screen->id, 'oc3daig_image')  !== false ) {
                 wp_enqueue_style(
                         'jquery-ui',
                         OC3DAIG_URL . '/views/resources/css/jquery-ui.css',
@@ -264,22 +271,30 @@ if (!class_exists('Oc3dAig_AdminController')) {
         }
 
         public function registerAdminMenu() {
+            
+			
+            
 
+            add_menu_page('OC3D AI Genius', 'OC3D AI Genius',
+                    'edit_posts', self::ADMIN_MENU, null,
+                    $this->admlogo);
+            add_submenu_page(self::ADMIN_MENU, __('Image', OC3DAIG_TEXT_DOMAIN), 
+                __('Image', OC3DAIG_TEXT_DOMAIN), 'edit_posts',
+               OC3DAIG_PREFIX_LOW . 'image', [$this->image_controller, 'showMainView']);
             if (!Oc3dAig_Utils::checkEditInstructionAccess()) {
                 return;
             }
-
-            add_menu_page('Settings', 'OC3D AI Genius',
-                    'edit_posts', self::ADMIN_MENU, null,
-                    $this->admlogo);
-
             $this->config_controller->registerAdminMenu();
+            
+            
         }
 
         function showSettings() {
             
         }
-
+        
+	
+        
         function gptLoadInstructions() {
 
             $r = ['result' => 0, 'msg' => __('Unknow problem')];

@@ -1,5 +1,7 @@
 <?php ?>
-
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
 <script>
     
 </script>
@@ -26,9 +28,9 @@
 
 
 <script>
-    const oc3daajaxAction = '<?php echo admin_url('admin-ajax.php'); ?>';
+    const oc3daajaxAction = '<?php echo esc_url(admin_url('admin-ajax.php')); ?>';
 
-    let oc3d_gpt_confnonce = "<?php echo wp_create_nonce('oc3d_gpt_confnonce'); ?>";
+    let oc3d_gpt_confnonce = "<?php echo esc_html(wp_create_nonce('oc3d_gpt_confnonce')); ?>";
     let oc3daig_instruction_table_height = 0;
 
     jQuery(function () {
@@ -48,17 +50,6 @@
     
     
     jQuery(document).ready(function () {
-        let oc3daig_instruction = document.querySelector("#oc3daig_instruction");
-        oc3daig_instruction.addEventListener("paste", (event) => {
-            //event.preventDefault();
-            let paste = (event.clipboardData || window.clipboardData).getData("text");
-            let len = event.target.value.length;
-            if (len > 0 || paste.length > 0) {
-                document.querySelector('#oc3daig_submit_edit_instruction').disabled = false;//oc3daig_submit_edit_instruction
-            } else {
-                document.querySelector('#oc3daig_submit_edit_instruction').disabled = true;
-            }
-        });
 
 
     });

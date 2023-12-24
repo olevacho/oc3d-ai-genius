@@ -600,11 +600,15 @@ function oc3daigPutModelsLoader(){
     }
 }
 
-function oc3daigPutInstructionsLoader(element_selector,side,distance){
+function oc3daigPutInstructionsLoader(element_selector,side,distance,loader_selector){
 
     let targetelement = document.querySelector(element_selector);// '.oc3daig_button_container.oc3daig_bloader'
-    let loader = document.querySelector('.oc3daig-instructions-loader');
-    
+    let loader = null;
+    if(loader_selector){
+        loader = document.querySelector(loader_selector);
+    }else{
+        loader = document.querySelector('.oc3daig-instructions-loader');
+    }
     if(targetelement && loader){
 
         let rect = targetelement.getBoundingClientRect();
@@ -651,20 +655,29 @@ function oc3daigGetModels(event) {
 
 }
 
-function oc3daigShowLoader(){
+function oc3daigShowLoader(loader_selector){
 
     if(!jQuery){
         return;
         
     }
-    jQuery('.oc3daig-custom-loader').css('display','grid');
+    
+    if(loader_selector){
+        jQuery(loader_selector).css('display','grid');
+    }else{
+        jQuery('.oc3daig-custom-loader').css('display','grid');
+    }
     
 }
 
-function oc3daigHideLoader(){
+function oc3daigHideLoader(loader_selector){
 
     if(jQuery){
-        jQuery('.oc3daig-custom-loader').hide();
+        if(loader_selector){
+            jQuery(loader_selector).hide();
+        }else{    
+            jQuery('.oc3daig-custom-loader').hide();
+        }
     }
 }
 
@@ -1080,3 +1093,5 @@ function oc3daigMetaSearchKeyUp(e) {
         oc3daig_radion_lst2[rmidx] = 'Deleted';
         console.log(oc3daig_radion_lst2);
     }
+
+
