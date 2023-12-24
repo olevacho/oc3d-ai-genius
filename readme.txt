@@ -7,7 +7,7 @@ Tested up to: 6.3.1
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
-Stable tag: 1.0.2
+Stable tag: 1.1.3
 
 AI power for Wordpress. You can edit, generate texts, write programming codes using GPT. Plugin allows to use instructions, stored previously in database. 
 
