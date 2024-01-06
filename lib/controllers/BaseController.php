@@ -34,9 +34,8 @@ if (!class_exists('Oc3dAig_BaseController')) {
 
         public function render() {
             extract($this->view_vars, EXTR_SKIP);
-            ob_start();
+            
             include $this->view;
-            echo ob_get_clean();
         }
 
         function verifyPostRequest($r, $nonce = '', $action = '') {

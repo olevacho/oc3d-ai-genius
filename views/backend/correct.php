@@ -246,7 +246,7 @@ $total_instructions = $arr_instructions['cnt'];
 </div>
 </div>
     <script>
-    let oc3daig_instructions = <?php echo json_encode($js_instructions); ?>;
+    let oc3daig_instructions = <?php echo wp_json_encode($js_instructions,JSON_HEX_TAG); ?>;
     let oc3daig_edited_instruction_id = 0;
     let oc3d_gpt_loadnoncec = "<?php echo esc_html(wp_create_nonce('oc3d_gpt_loadnoncec')); ?>";
     let oc3daig_typeofinstr_text = '<?php esc_html_e('text-edit', 'oc3d-ai-genius'); ?>';

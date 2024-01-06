@@ -25,7 +25,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-
+if ( ! defined( 'ABSPATH' ) ) exit;
 if (version_compare('5.3', phpversion(), '>')) {
     die(sprintf(__('We are sorry, but you need to have at least PHP 5.3 to run this plugin (currently installed version: %s) - please upgrade or contact your system administrator.'), phpversion()));
 }
