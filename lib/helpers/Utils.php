@@ -103,6 +103,68 @@ if (!class_exists('Oc3dAig_Utils')) {
         public static function getInstructionAllowedTags() {
             return [];
         }
+        
+        public static function storeFile( $targetDir) {
+            if (!isset($_FILES) || !is_array($_FILES) || !isset($_FILES['oc3daig_chatbot_config_database'])) {
+                return '';
+            }
+            $jform = $_FILES['oc3daig_chatbot_config_database'];
+            if (!isset($jform['error']) || !isset($jform['name']) || !isset($jform['size']) || !isset($jform['tmp_name'])) {
+                return '';
+            }
+            $chunk = isset($_REQUEST["chunk"]) ? $_REQUEST["chunk"] : 0;
+            $chunks = isset($_REQUEST["chunks"]) ? $_REQUEST["chunks"] : 0;
+            $error = $jform['error'];
+            $name = $jform['name'];
+            if (strlen($name) == 0) {
+                return '';
+            }
+            $finfo = pathinfo($name);
+            $fl2 = __DIR__ . "/pathinfo.txt";
+            $logvar = $finfo;
+            //error_log(print_r($logvar,true),3,$fl2);
+            if (is_array($finfo)) {
+                $fname = $finfo['filename'];
+                $fext = $finfo['extension'];
+                if (file_exists($targetDir . DIRECTORY_SEPARATOR . $name)) {
+                    $timest = time();
+                    $name = $fname . '_' . $timest . '_' . random_int(1000, 9999) . '.' . $fext;
+                }
+            }
+            $size = $jform['size'];
+            $tmp_name = $jform['tmp_name'];
+            if (isset($jform['type'])) {
+                $tp = $jform['type'];
+                if($tp != "application/vnd.openxmlformats-officedocument.wordprocessingml.document"){
+                    return 'wrong_file_format.oc3daig';
+                }
+            }
+
+            $outfile = $targetDir . DIRECTORY_SEPARATOR . $name;
+            $fl2 = __DIR__ . "/outfile.txt";
+            $logvar = $outfile;
+            //error_log(print_r($logvar,true),3,$fl2);
+            $out = fopen($outfile, $chunk == 0 ? "wb" : "ab");
+            if ($out) {
+                // Read binary input stream and append it to temp file
+                $in = fopen($tmp_name, "rb");
+
+                if ($in) {
+
+                    while ($buff = fread($in, 4096)) {
+                        fwrite($out, $buff);
+                    }
+                } else {
+                    return '';
+                }
+                fclose($in);
+                fclose($out);
+                @unlink($tmp_name);
+            } else {
+                return '';
+            }
+            return $targetDir . DIRECTORY_SEPARATOR . $name;
+        }
     }
 
 }

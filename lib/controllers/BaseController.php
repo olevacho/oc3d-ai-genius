@@ -24,7 +24,9 @@ if (!class_exists('Oc3dAig_BaseController')) {
             $path = OC3DAIG_PATH . "/lib/models/" . $name . ".php";
             if (file_exists($path)) {
                 $model_name = OC3DAIG_CLASS_PREFIX . ucfirst($name);
-
+                if (!class_exists(OC3DAIG_CLASS_PREFIX.ucfirst($name))) {
+                    include_once $path;
+                }
                 $this->model = new $model_name();
                 //ucfirst()
             } else {

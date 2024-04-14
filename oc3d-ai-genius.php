@@ -40,11 +40,17 @@ define('OC3DAIG_PATH', WP_PLUGIN_DIR . '/' . basename(dirname(__FILE__)));
 define('OC3DAIG_URL', plugins_url('', __FILE__));
 define('OC3DAIG_PLUGIN_FILE', __FILE__);
 define('OC3DAIG_TEXT_DOMAIN', 'oc3d-ai-genius');
+define( 'OC3DAIG_CHATGPT_BOT_PREFIX', 'oc3daig_chatbot_' );
+define( 'OC3DAIG_CHATGPT_BOT_OPTIONS_PREFIX', 'oc3daig_chatbot_opt_' );
+define('OC3DAIG_VERSION', '1.3.1');
+
 //Init the plugin
 require_once OC3DAIG_PATH . '/lib/helpers/Utils.php';
 require_once OC3DAIG_PATH . '/lib/Oc3dAig.php';
 require_once OC3DAIG_PATH . '/lib/controllers/BaseController.php';
 require_once OC3DAIG_PATH . '/lib/controllers/AdminController.php';
+require_once OC3DAIG_PATH . '/lib/dispatchers/FrontendDispatcher.php';
+
 
 register_activation_hook(__FILE__, array('Oc3dAig', 'install'));
 register_deactivation_hook(__FILE__, array('Oc3dAig', 'deactivate'));

@@ -5,10 +5,11 @@ if (!class_exists('Oc3dAig')) {
     class Oc3dAig {
 
         public $admin_controller;
-
+        public $frontend_dispatcher;
         
         public function __construct() {
             $this->admin_controller = new Oc3dAig_AdminController();
+            $this->frontend_dispatcher = new Oc3dAig_FrontendDispatcher();
             add_action('admin_enqueue_scripts', [$this, 'enqueueScripts']);
             add_filter('plugin_action_links', [$this, 'actionLinks'], 10, 2);
         }
