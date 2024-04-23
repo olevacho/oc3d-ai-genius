@@ -9,7 +9,7 @@ License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Stable tag: 1.1.3
 
-AI power for Wordpress. Create your own AI chatbot, edit, generate texts, write programming codes  and generate images using GPT. Plugin allows to use instructions, stored previously in database. To get the chatbot operational, simply insert the shortcode [oc3dai_chatbot] into any page or post.
+AI power for Wordpress. Create your own AI chatbot, edit, generate texts, write programming codes  and generate images using GPT. Plugin allows to use instructions, stored previously in database. To get the chatbot operational, simply insert the shortcode [oc3daig_chatbot] into any page or post.
 
 == Description ==
 
