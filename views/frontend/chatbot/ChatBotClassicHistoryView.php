@@ -11,7 +11,7 @@ if (!class_exists('Oc3dAig_ChatBotClassicHistoryView')) {
         public function render($data_par,$data_parameters){
             
                 ob_start();
-                var_dump($data_parameters);
+                //var_dump($data_parameters);
                 
                 $chatbot_picture_url = OC3DAIG_URL."/views/resources/img/chatbot.svg";
 				
