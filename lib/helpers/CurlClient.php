@@ -79,7 +79,7 @@ if (!class_exists('Oc3dAig_CurlClient')) {
                         $lines = explode("\n", $buffer); // Split buffer into lines
                         $fl2=__DIR__."/response_assistant_lines.txt";  
                         $logvar = $lines ; 
-                        error_log(print_r($logvar,true),3,$fl2);
+                        //error_log(print_r($logvar,true),3,$fl2);
                         foreach ($lines as $line) {
                             if (strpos($line, 'data:') === 0) {
                                 // Extract event data
