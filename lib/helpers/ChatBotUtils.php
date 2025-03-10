@@ -65,6 +65,9 @@ if (!class_exists('Oc3dAig_ChatBotUtils')) {
             return Oc3dAig_Utils::getEditModels();
         }
         
+        public static function getProviders(){
+            return ['default','assistant'];
+        }
         
         
     }

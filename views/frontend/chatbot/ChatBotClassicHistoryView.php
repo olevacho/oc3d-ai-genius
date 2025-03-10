@@ -78,12 +78,16 @@ if (!class_exists('Oc3dAig_ChatBotClassicHistoryView')) {
 
                 ?>
                 <input type="hidden" id="oc3daiaidbot" value="<?php echo esc_html($data_parameters['bot_id']); ?>"/>
+                <input type="hidden" id="oc3daigchatid" value="<?php echo isset($data_parameters['chat_id'])?esc_html($data_parameters['chat_id']):''; ?>"/>
+                <input type="hidden" id="oc3daigbotview" value="<?php echo esc_html($data_parameters['bot_view']); ?>"/>
             </div>
         </div>
     </div>
     <script>
     let oc3daig_button_config_general_send = '<?php echo esc_html($send_button_text); ?>';
     let oc3daig_button_config_general_clear = '<?php echo esc_html($clear_button_text); ?>';
+    let oc3daig_bot_view = '<?php echo (int)$data_parameters['bot_view']; ?>';
+    let oc3daig_chat_id = '<?php echo esc_html($data_parameters['chat_id']); ?>';
     </script>
 
 				<?php

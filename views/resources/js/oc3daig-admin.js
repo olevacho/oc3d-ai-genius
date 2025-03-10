@@ -10,6 +10,19 @@ function oc3daigCountInstructionChar(par) {
     }
 }
 
+function oc3daiaSaveChatbotGeneral(e) {
+    e.preventDefault();
+    
+    if(!jQuery){
+        alert(oc3daig_jquery_is_not_installed);
+        return;
+    }
+    let genForm = jQuery('#oc3daig_chatbot_gen_form');
+    let data = genForm.serialize();
+    oc3daigPutGeneralLoader();
+    oc3d_performAjax.call(oc3d_general_tab_dynamic, data);
+
+}
 
 
 function oc3daigToggleInstruction(e, instr_id) {

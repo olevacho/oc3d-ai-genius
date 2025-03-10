@@ -1,5 +1,5 @@
 # oc3d-ai-genius
-Wordpress plugin. Create your own AI chatbot, edit, generate texts, write programming codes and generate images using ChatGPT. It allows to use instructions, stored previously in database. 
+Wordpress plugin. You can edit, generate texts, write programming codes and generate images using ChatGPT. It allows to use instructions, stored previously in database. 
 
 
 ### Quick setup:
@@ -14,7 +14,7 @@ Now you can use OC3D AI Genius plugin as metabox that is displayed at post, page
 1. Go to <YOUR_WEBSITE_URL>/wp-admin/admin.php?page=oc3daig_settings. In the ChatGPT tab fill your open AI key in the 'Open AI Key:'You can pick up it from https://platform.openai.com/account/api-keys 
 2. You can fill other fields on this tab or leave them by default.
 3. By default plugin displays AI metabox on post and page edit pages. If you want to display this metabox in the edit pages under other post types then select them on the 'Post Types' section.
-4. To get the chatbot operational, simply insert the shortcode [oc3daig_chatbot] into any page or post.
+
 
 
 ### Post types setup.

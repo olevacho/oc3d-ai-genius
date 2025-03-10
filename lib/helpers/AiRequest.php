@@ -9,6 +9,9 @@ if (!class_exists('Oc3dAig_AiRequest')) {
         public static $files_api_url = 'https://api.openai.com/v1/files';
         public static $chat_completion_endpoint = 'https://api.openai.com/v1/chat/completions';
         public static $assistant_api = 'https://api.openai.com/v1/assistants';
+        public static $thread_url = "https://api.openai.com/v1/threads";
+        public static $http_client = 'curl';
+        
         /* prepares chat completion chatGPT API request and calls :sendChatGptRequest
         @param $data     array  received from Edit&Extend metabox form
          * see https://platform.openai.com/docs/api-reference/chat/create 
@@ -317,35 +320,70 @@ if (!class_exists('Oc3dAig_AiRequest')) {
             return $res;
         }
         
-        public static function createAssistant($options){
-            $res = ['code'=>404,'body'=>'','error_msg' => ''];
-            $request_url = self::$assistant_api;
+        public static function createAssistantRetrieval($options){
+            
+            $options['assistant_id'] = '';
+            $res = self::updateAssistantRetrieval($options);
+            return $res;
+            
+        }
+        
+        public static function createAssistantRetrievalV2($options){
+            
+            $res = ['code'=>404,'body'=>'','error_msg' => '','id'=>'','model' =>''
+            ,'created_at' =>'','instruction' =>'','name' =>''];
+            if(isset($options['assistant_id']) && strlen($options['assistant_id']) > 0){//update
+                $assistant_id = $options['assistant_id'];
+                $request_url = self::$assistant_api.'/'.$assistant_id;
+                $post_data = array(
+                    'instructions' => $options['instructions'] ,
+                    'tools' => array(
+                        array(
+                            'type' => 'retrieval'
+                        )
+                    ),
+                    'model' => $options['model']
+                );
+            }else{//create
+                $request_url = self::$assistant_api;
+                $post_data = array(
+                    'instructions' => $options['instructions'] ,
+                    'name' => $options['assistant_name'],
+                    'tools' => array(
+                        array(
+                            'type' => 'file_search'
+                        )
+                    ),
+                    'model' => $options['model'],
+                    'tool_resources'=>[
+                        'file_search'=>[
+                            'vector_stores'=>[[
+                                'file_ids' => array($options['file_id'])
+                                ]]
+                            ]
+                        ],
+                    
+                );
+                
+            }
             if (strlen(self::$gpt_key) == 0) {
                 self::$gpt_key = get_option(OC3DAIG_PREFIX_LOW . 'open_ai_gpt_key', '');
             }
+            
             $headers = array(
                 'Content-Type' => 'application/json',
                 'Authorization' => 'Bearer ' . self::$gpt_key,
-                'OpenAI-Beta' => 'assistants=v1'
+                'OpenAI-Beta' => 'assistants=v2'
             );
-            $post_data = array(
-                'instructions' => $options['instructions'] ,
-                'name' => $options['assistant_name'],
-                'tools' => array(
-                    array(
-                        'type' => 'retrieval'
-                    )
-                ),
-                'model' => $options['model'],
-                'file_ids' => array($options['file_id'])
-            );
+            
             //$options['file_id']  $options['model'] = 'gpt-4-turbo' $options['assistant_name'] = 'Bubble.io Tutor' $options['instructions'] ='You are a website support chatbot. Use your knowledge base to best respond to customer queries.'
             $response = wp_remote_request(
                 $request_url,
                 array(
                     'method' => 'POST',
                     'headers' => $headers,
-                    'body' => wp_json_encode($post_data)
+                    'body' => wp_json_encode($post_data),
+                    'timeout'=>120
                 )
             );
 
@@ -357,9 +395,516 @@ if (!class_exists('Oc3dAig_AiRequest')) {
             } else {
                 $res['code']  =  wp_remote_retrieve_response_code( $response );
                 $res['body']  =  wp_remote_retrieve_body( $response );
+                if(strlen($res['body']) > 0){
+                    $res_obj = json_decode($res['body'], true);
+                    if(is_array($res_obj) && isset($res_obj['id'])){
+                        $res['id'] = $res_obj['id'];
+                        $res['created_at'] = $res_obj['created_at'];
+                        $res['model'] = $options['model'];
+                        $res['instruction'] = $options['instructions'];
+                        $res['name'] = $options['assistant_name'];
+                        $res['file_id'] = $options['file_id'];
+                        $res['vector_store_ids'] = '';
+                        if(is_array($res_obj['tool_resources']) && count($res_obj['tool_resources']) > 0){
+                            $t_r = $res_obj['tool_resources'];
+                            if(is_array($t_r['file_search']) && count($t_r['file_search']) > 0){
+                                $f_s = $t_r['file_search'];
+                                if(is_array($f_s['vector_store_ids']) && count($f_s['vector_store_ids']) > 0){
+                                    $res['vector_store_ids'] = $f_s['vector_store_ids'][0];
+                                }
+                            }
+                        }
+                    }
+                }
                 // Handle the response body
             }
             return $res;
+            
+        }
+        
+        public static function updateAssistantRetrievalV2($options){
+
+            $res = ['code'=>404,'body'=>'','error_msg' => '','id'=>'','model' =>''
+            ,'created_at' =>'','instruction' =>'','name' =>''];
+            if(isset($options['assistant_id']) && strlen($options['assistant_id']) > 0){//update
+                $assistant_id = $options['assistant_id'];
+                $request_url = self::$assistant_api.'/'.$assistant_id;
+                $post_data = array(
+                    'instructions' => $options['instructions'] ,
+                    'tools' => array(
+                        array(
+                            'type' => 'file_search'
+                        )
+                    ),
+                    'model' => $options['model']
+                );
+            }else{//create
+                $request_url = self::$assistant_api;
+                $post_data = array(
+                    'instructions' => $options['instructions'] ,
+                    'name' => $options['assistant_name'],
+                    'tools' => array(
+                        array(
+                            'type' => 'file_search'
+                        )
+                    ),
+                    'model' => $options['model'],
+                    'tool_resources'=>[
+                        'file_search'=>[
+                            'vector_stores'=>[[
+                                'file_ids' => array($options['file_id'])
+                                ]]
+                            ]
+                        ],
+                );
+                
+            }
+            if (strlen(self::$gpt_key) == 0) {
+                self::$gpt_key = get_option(OC3DAIG_PREFIX_LOW . 'open_ai_gpt_key', '');
+            }
+            
+            $headers = array(
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Bearer ' . self::$gpt_key,
+                'OpenAI-Beta' => 'assistants=v2'
+            );
+            
+            //$options['file_id']  $options['model'] = 'gpt-4-turbo' $options['assistant_name'] = 'Bubble.io Tutor' $options['instructions'] ='You are a website support chatbot. Use your knowledge base to best respond to customer queries.'
+            $response = wp_remote_request(
+                $request_url,
+                array(
+                    'method' => 'POST',
+                    'headers' => $headers,
+                    'body' => wp_json_encode($post_data),
+                    'timeout'=>120
+                )
+            );
+
+            // Handle the response as needed
+            if ( is_wp_error( $response ) ) {
+                $error_message = $response->get_error_message();
+                $res['error_msg']  = $error_message;
+                $res['code']  = 500;
+            } else {
+                $res['code']  =  wp_remote_retrieve_response_code( $response );
+                $res['body']  =  wp_remote_retrieve_body( $response );
+                if(strlen($res['body']) > 0){
+                    $res_obj = json_decode($res['body'], true);
+                    if(is_array($res_obj) && isset($res_obj['id'])){
+                        $res['id'] = $res_obj['id'];
+                        $res['created_at'] = $res_obj['created_at'];
+                        $res['model'] = $options['model'];
+                        $res['instruction'] = $options['instructions'];
+                        $res['name'] = $options['assistant_name'];
+                        $res['file_id'] = $options['file_id'];
+                    }
+                }
+                // Handle the response body
+            }
+            return $res;
+        }
+        
+        public static function updateAssistantRetrieval($options){
+
+            $res = ['code'=>404,'body'=>'','error_msg' => '','id'=>'','model' =>''
+            ,'created_at' =>'','instruction' =>'','name' =>''];
+            if(isset($options['assistant_id']) && strlen($options['assistant_id']) > 0){//update
+                $assistant_id = $options['assistant_id'];
+                $request_url = self::$assistant_api.'/'.$assistant_id;
+                $post_data = array(
+                    'instructions' => $options['instructions'] ,
+                    'tools' => array(
+                        array(
+                            'type' => 'retrieval'
+                        )
+                    ),
+                    'model' => $options['model']
+                );
+            }else{//create
+                $request_url = self::$assistant_api;
+                $post_data = array(
+                    'instructions' => $options['instructions'] ,
+                    'name' => $options['assistant_name'],
+                    'tools' => array(
+                        array(
+                            'type' => 'retrieval'
+                        )
+                    ),
+                    'model' => $options['model'],
+                    'file_ids' => array($options['file_id'])
+                );
+                
+            }
+            if (strlen(self::$gpt_key) == 0) {
+                self::$gpt_key = get_option(OC3DAIG_PREFIX_LOW . 'open_ai_gpt_key', '');
+            }
+            
+            $headers = array(
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Bearer ' . self::$gpt_key,
+                'OpenAI-Beta' => 'assistants=v1'
+            );
+            
+            //$options['file_id']  $options['model'] = 'gpt-4-turbo' $options['assistant_name'] = 'Bubble.io Tutor' $options['instructions'] ='You are a website support chatbot. Use your knowledge base to best respond to customer queries.'
+            $response = wp_remote_request(
+                $request_url,
+                array(
+                    'method' => 'POST',
+                    'headers' => $headers,
+                    'body' => wp_json_encode($post_data),
+                    'timeout'=>120
+                )
+            );
+
+            // Handle the response as needed
+            if ( is_wp_error( $response ) ) {
+                $error_message = $response->get_error_message();
+                $res['error_msg']  = $error_message;
+                $res['code']  = 500;
+            } else {
+                $res['code']  =  wp_remote_retrieve_response_code( $response );
+                $res['body']  =  wp_remote_retrieve_body( $response );
+                if(strlen($res['body']) > 0){
+                    $res_obj = json_decode($res['body'], true);
+                    if(is_array($res_obj) && isset($res_obj['id'])){
+                        $res['id'] = $res_obj['id'];
+                        $res['created_at'] = $res_obj['created_at'];
+                        $res['model'] = $options['model'];
+                        $res['instruction'] = $options['instructions'];
+                        $res['name'] = $options['assistant_name'];
+                        $res['file_id'] = $options['file_id'];
+                    }
+                }
+                // Handle the response body
+            }
+            return $res;
+        }
+        
+        
+        public static function removeAssistantV2($assistant_id = ''){
+            
+            
+            $request_url = self::$assistant_api.'/'.$assistant_id;
+            if (strlen(self::$gpt_key) == 0) {
+                self::$gpt_key = get_option(OC3DAIG_PREFIX_LOW . 'open_ai_gpt_key', '');
+            }
+            
+            $headers = array(
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Bearer ' . self::$gpt_key,
+                'OpenAI-Beta' => 'assistants=v2'
+            );
+            
+            //$options['file_id']  $options['model'] = 'gpt-4-turbo' $options['assistant_name'] = 'Bubble.io Tutor' $options['instructions'] ='You are a website support chatbot. Use your knowledge base to best respond to customer queries.'
+            $response = wp_remote_request(
+                $request_url,
+                array(
+                    'method' => 'DELETE',
+                    'headers' => $headers,
+                    'timeout'=>120
+                )
+            );
+
+            // Handle the response as needed
+            if ( is_wp_error( $response ) ) {
+                $error_message = $response->get_error_message();
+                $res['error_msg']  = $error_message;
+                $res['code']  = 500;
+            } else {
+                $res['code']  =  wp_remote_retrieve_response_code( $response );
+                $res['body']  =  wp_remote_retrieve_body( $response );
+                if(strlen($res['body']) > 0){
+                    $res_obj = json_decode($res['body'], true);
+                    if(is_array($res_obj) && isset($res_obj['id']) && isset($res_obj['deleted']) && $res_obj['deleted'] == true){
+                        return true;
+                    }
+                }
+                // Handle the response body
+            }
+            return false;
+        }
+        
+        public static function sendHttpRequest($url, $options) {
+
+            $http_client = self::$http_client;
+            switch($http_client){
+                case 'curl':
+                    if (!class_exists('Oc3dAig_CurlClient')) {
+                        require_once OC3DAIG_PATH . '/lib/helpers/CurlClient.php';
+                    }
+                    return Oc3dAig_CurlClient::sendCurlRequest($url, $options);
+                    break;
+                    
+                default:
+                    if (!class_exists('Oc3dAig_CurlClient')) {
+                        require_once OC3DAIG_PATH . '/lib/helpers/CurlClient.php';
+                    }
+                    return Oc3dAig_CurlClient::sendCurlRequest($url, $options);
+                    
+            }
+        }
+        
+        public static function sendCurlRequest($url, $options) {
+
+            $curl = curl_init($url);
+
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+            
+            if ($options) {
+                $stream_options = stream_context_get_options($options);
+                if (isset($stream_options['http']['method'])) {
+                    curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $stream_options['http']['method']);
+                }
+                if (isset($stream_options['http']['header'])) {
+                    curl_setopt($curl, CURLOPT_HTTPHEADER, $stream_options['http']['header']);
+                }
+                if (isset($stream_options['http']['content'])) {
+                    curl_setopt($curl, CURLOPT_POSTFIELDS, $stream_options['http']['content']);
+                }
+            }
+
+            $response = curl_exec($curl);
+            curl_close($curl);
+
+            return $response;
+        }
+        
+        public static function createThread($user_msg = '') {
+
+            $url = self::$thread_url;
+            if (strlen(self::$gpt_key) == 0) {
+                self::$gpt_key = get_option(OC3DAIG_PREFIX_LOW . 'open_ai_gpt_key', '');
+            }
+            $headers = array(
+                "Content-Type: application/json",
+                "OpenAI-Beta: assistants=v2",
+                "Authorization: Bearer " . self::$gpt_key
+            );
+            
+            if(strlen($user_msg) > 0){
+                $data = array(
+                    "role" => "user",
+                    "content" => $user_msg
+                );
+                $options = stream_context_create(array(
+                    'http' => array(
+                        'method' => 'POST',
+                        'header' => $headers,
+                        'ignore_errors' => true,
+                        'content' => $data
+                    )
+                ));
+            }else{
+                $options = stream_context_create(array(
+                    'http' => array(
+                        'method' => 'POST',
+                        'header' => $headers,
+                        'ignore_errors' => true 
+                    )
+                ));
+            }
+            $response = self::sendHttpRequest($url, $options);
+
+            return json_decode($response, true);
+        }
+        
+        public static function addAssistantMessage($thread_id, $user_msg) {
+            $url = self::$thread_url."/".$thread_id."/messages";
+            if (strlen(self::$gpt_key) == 0) {
+                self::$gpt_key = get_option(OC3DAIG_PREFIX_LOW . 'open_ai_gpt_key', '');
+            }
+            $headers = array(
+                "Content-Type: application/json",
+                "OpenAI-Beta: assistants=v2",
+                "Authorization: Bearer " . self::$gpt_key
+            );
+            $data = array(
+                "role" => "user",
+                "content" => $user_msg
+            );
+
+            $options = stream_context_create(array(
+                'http' => array(
+                    'method' => 'POST',
+                    'header' => $headers,
+                    'content' => json_encode($data)
+            )));
+            $response = self::sendHttpRequest($url, $options);
+
+            return json_decode($response, true);
+
+        }
+        
+        
+        public static function runAssistant($thread_id, $assistant_id, $instruction) {
+            
+            $url = self::$thread_url."/".$thread_id."/runs";
+            if (strlen(self::$gpt_key) == 0) {
+                self::$gpt_key = get_option(OC3DAIG_PREFIX_LOW . 'open_ai_gpt_key', '');
+            }
+            
+            $headers = array(
+                "Content-Type: application/json",
+                "OpenAI-Beta: assistants=v2",
+                "Authorization: Bearer " . self::$gpt_key
+            );
+            if(strlen($instruction) > 1){
+                $data = array(
+                    "assistant_id" => $assistant_id,
+                    "instructions" => $instruction
+                );
+            }else{
+                $data = array(
+                    "assistant_id" => $assistant_id
+                );
+            }
+            $options = stream_context_create(array(
+                'http' => array(
+                    'method' => 'POST',
+                    'header' => $headers,
+                    'content' => json_encode($data),
+                    'ignore_errors' => true // This allows the function to proceed even if there's an HTTP error
+                )
+            ));
+
+            $response = self::sendHttpRequest($url, $options);
+
+            if ($response === FALSE) {
+                
+                return "Error: Unable to fetch response.";
+            }
+
+            if (http_response_code() != 200) {
+                // back_trace( 'ERROR', 'HTTP response code: ' . print_r(http_response_code()));
+                return "Error: HTTP response code " . http_response_code();
+            }
+
+            return json_decode($response, true);
+        }
+        
+        
+        public static function runAssistantStream($thread_id, $assistant_id, $instruction) {
+            
+            $url = self::$thread_url."/".$thread_id."/runs";
+            if (strlen(self::$gpt_key) == 0) {
+                self::$gpt_key = get_option(OC3DAIG_PREFIX_LOW . 'open_ai_gpt_key', '');
+            }
+            
+            $headers = array(
+                "Content-Type: application/json",
+                "OpenAI-Beta: assistants=v2",
+                "Authorization: Bearer " . self::$gpt_key
+            );
+            if(strlen($instruction) > 1){
+                $data = array(
+                    "assistant_id" => $assistant_id,
+                    "instructions" => $instruction,
+                    "stream" => true
+                );
+            }else{
+                $data = array(
+                    "assistant_id" => $assistant_id,
+                    "stream" => true
+                );
+            }
+            $options = stream_context_create(array(
+                'http' => array(
+                    'method' => 'POST',
+                    'header' => $headers,
+                    'content' => json_encode($data),
+                    'ignore_errors' => true // This allows the function to proceed even if there's an HTTP error
+                )
+            ));
+
+            if (!class_exists('Oc3dAig_CurlClient')) {
+                        require_once OC3DAIG_PATH . '/lib/helpers/CurlClient.php';
+                    }
+            $response = Oc3dAig_CurlClient::openStream($url, $options);
+
+            if ($response === FALSE) {
+                
+                return "Error: Unable to fetch response.";
+            }
+
+            if (http_response_code() != 200) {
+                // back_trace( 'ERROR', 'HTTP response code: ' . print_r(http_response_code()));
+                return "Error: HTTP response code " . http_response_code();
+            }
+
+            return json_decode($response, true);
+        }
+        
+
+        // $url = "https://api.openai.com/v2/threads/" . $thread_id . "/messages";
+        public static function listAssistantMessages($thread_id) {
+            $url = self::$thread_url . "/" . $thread_id . "/messages";
+            if (strlen(self::$gpt_key) == 0) {
+                self::$gpt_key = get_option(OC3DAIG_PREFIX_LOW . 'open_ai_gpt_key', '');
+            }
+
+            
+            $url = get_threads_api_url() . '/' . $thread_id . '/messages';
+            $headers = array(
+                "Content-Type: application/json",
+                "OpenAI-Beta: assistants=v2",
+                "Authorization: Bearer " . self::$gpt_key
+            );
+
+            $options = stream_context_create(array(
+                'http' => array(
+                    'method' => 'GET',
+                    'header' => $headers
+            )));
+            $response = self::sendHttpRequest($url, $options);
+
+            return json_decode($response, true);
+        }
+        
+        
+
+        public static function getRunStepsStatus($thread_id, $run_id) {
+            $status = false;
+            if (strlen(self::$gpt_key) == 0) {
+                self::$gpt_key = get_option(OC3DAIG_PREFIX_LOW . 'open_ai_gpt_key', '');
+            }
+
+                // $url = "https://api.openai.com/v2/threads/" . $thread_id . "/runs/" . $runId . "/steps";
+                $url = self::$thread_url . '/' . $thread_id . '/runs/' . $run_id . '/steps';
+                $headers = array(
+                    "Content-Type: application/json",
+                    "OpenAI-Beta: assistants=v2",
+                    "Authorization: Bearer " . self::$gpt_key
+                );
+
+                $options = stream_context_create(array(
+                    'http' => array(
+                        'method' => 'GET',
+                        'header' => $headers
+                )));
+                $response = self::sendHttpRequest($url, $options);
+
+                $responseArray = json_decode($response, true);
+
+                if (array_key_exists("data", $responseArray) && !is_null($responseArray["data"])) {
+                    $data = $responseArray["data"];
+                } else {
+                    // DIAG - Handle error here
+                    $status = "failed";
+                    // DIAG - Diagnostics
+                    // back_trace( 'ERROR', "Error - GPT Assistant - Step 7.");
+                    exit;
+                }
+
+                foreach ($data as $item) {
+                    if ($item["status"] == "completed") {
+                        $status = true;
+                        break;
+                    }
+                }
+
+                return $status;
+            
         }
     }
 

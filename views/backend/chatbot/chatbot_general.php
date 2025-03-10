@@ -59,7 +59,7 @@ if(true){
                         <div class="oc3daig_block ">
                             <div style="position:relative;">
                                 <div class="oc3daig_block_header">
-                                    <h3><?php esc_html_e('Assistant behavior', 'oc3d-ai-aiassistant'); ?></h3>
+                                    <h3><?php esc_html_e('Assistant behavior (do not use it - outdated!)', 'oc3d-ai-aiassistant'); ?></h3>
                                 </div>
 
                                 <div class="oc3daig_block_content" >

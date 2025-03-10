@@ -23,7 +23,7 @@ if ($stored_selected_p_types == FALSE) {
 }
 
 $response_timeout = (int) get_option(OC3DAIG_PREFIX_LOW . 'response_timeout', 120);
-$connection_timeout = (int) get_option(OC3DAIG_PREFIX_LOW . 'connection_timeout', 10);
+$connection_timeout = (int) get_option(OC3DAIG_PREFIX_LOW . 'connection_timeout', 100);
 $max_tokens = (int) get_option(OC3DAIG_PREFIX_LOW . 'max_tokens', 1024);
 $count_of_instructions = (int) get_option(OC3DAIG_PREFIX_LOW . 'count_of_instructions', 10);
 $models = [];

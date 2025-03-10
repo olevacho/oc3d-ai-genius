@@ -63,7 +63,7 @@ if (!class_exists('Oc3dAig_BaseController')) {
                 return($r);
             }
 
-
+            $r['result'] = 0;
             return $r;
         }
 

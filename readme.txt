@@ -1,15 +1,15 @@
 === OC3D AI Genius ===
 Name: OC3D AI Genius
-Contributors: Oleh C...  
+Contributors: Oleh Chornenkyy
 Tags: chatgpt,  ai writer, ai content, openai, chat gpt, text correction, ai text generation
 Requires at least: 5.6 
 Tested up to: 6.3.1
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
-Stable tag: 1.1.3
+Stable tag: 1.1.4
 
-AI power for Wordpress. Create your own AI chatbot, edit, generate texts, write programming codes  and generate images using GPT. Plugin allows to use instructions, stored previously in database. To get the chatbot operational, simply insert the shortcode [oc3daig_chatbot] into any page or post.
+AI power for Wordpress. You can edit, generate texts, write programming codes  and generate images using GPT. Plugin allows to use instructions, stored previously in database. 
 
 == Description ==
 

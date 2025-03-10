@@ -73,7 +73,17 @@ function oc3daiaSendMessage(e) {
   chathistory.scrollTop = chathistory.scrollHeight;
   let msgitem = {"id":oc3daiaGenId(),"role":"user","content":userInput,"actor":"ME: ","timestamp":new Date().getTime()};
   oc3daig_chatbot_messages.push(msgitem);
+  let oc3daig_chatbot_view = 1;
+  if(oc3daig_bot_view){
+      oc3daig_chatbot_view = oc3daig_bot_view;
+  }
+  
+  
   let bdy = {'messages':oc3daig_chatbot_messages,'bot_id':oc3daiaidbot,'message':userInput};
+  if(oc3daig_chatbot_view == 2 && oc3daig_chat_id){//if assistant chat
+      bdy['chat_id'] = oc3daig_chat_id;
+      bdy['botmode'] = 'assistant';
+  }
   fetch(oc3daiabotparameters.rest_url, {
     method: 'POST',
     headers: {
