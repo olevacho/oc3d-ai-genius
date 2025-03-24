@@ -8,7 +8,7 @@
   Author URI: https://github.com/olevacho/
   Text Domain: oc3d-ai-genius
   Domain Path: /lang
-  Version: 1.0.5
+  Version: 1.0.7
   License:  GPL-2.0+
   License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
   This program is free software; you can redistribute it and/or modify

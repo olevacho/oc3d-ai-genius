@@ -266,7 +266,7 @@ div.oc3daia-bot-chatbot > div.oc3daia-bot-chatbot-main-container.oc3daia-bot-cha
 .oc3daia-bot-chatbot button.oc3daia-bot-chatbot-speech-to-text-button {
     cursor: pointer;
     border: none;
-    background-color: #0C476E;
+    background-color: #0C476E !important;
     margin-right: 10px;
     height: 40px;
     text-align: center;

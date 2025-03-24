@@ -15,7 +15,7 @@ if (!class_exists('Oc3dAig')) {
         }
 
         public function enqueueScripts() {
-            wp_enqueue_script('oc3daig_backend', OC3DAIG_URL . '/views/resources/js/oc3daig-admin.js', [], '2.3', true);
+            wp_enqueue_script('oc3daig_backend', OC3DAIG_URL . '/views/resources/js/oc3daig-admin.js', [], '2.4', true);
         }
 
         public function actionLinks($links, $file) {

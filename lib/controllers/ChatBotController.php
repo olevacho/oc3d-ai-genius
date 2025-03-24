@@ -38,7 +38,7 @@ if (!class_exists('Oc3dAig_ChatBotController')) {
 
         public function registerScripts(){
 
-            wp_enqueue_script( 'oc3daia', OC3DAIG_URL . '/views/frontend/resources/js/chatbot.js',  array( 'jquery' ), 2.2, false );
+            wp_enqueue_script( 'oc3daia', OC3DAIG_URL . '/views/frontend/resources/js/chatbot.js',  array( 'jquery' ), 2.5, false );
         }
         
         public function registerStyles(){
@@ -46,7 +46,7 @@ if (!class_exists('Oc3dAig_ChatBotController')) {
                     'oc3daia',
                     OC3DAIG_URL . '/views/frontend/resources/css/chatbot.css',
                     array(),
-                    OC3DAIG_VERSION
+                    2.5
             );
         }
 
