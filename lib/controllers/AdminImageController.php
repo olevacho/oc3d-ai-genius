@@ -5,7 +5,8 @@ if (!class_exists('Oc3dAig_AdminImageController')) {
     class Oc3dAig_AdminImageController extends Oc3dAig_BaseController {
 
         public $security_mode = 1;
-
+	public $headers = [];
+	
         const ORIGIN = 'https://api.openai.com';
         const API_VERSION = 'v1';
         const OPEN_AI_URL = self::ORIGIN . "/" . self::API_VERSION;

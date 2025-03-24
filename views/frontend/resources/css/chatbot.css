@@ -137,7 +137,7 @@ div.oc3daia-bot-chatbot > div.oc3daia-bot-chatbot-main-container.oc3daia-bot-cha
 }
 .oc3daia-bot-chatbot .oc3daia-bot-chatbot-header-row {
     padding: 13px;
-    background-color: #4e426d;
+    background-color: #0C476E;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -266,7 +266,7 @@ div.oc3daia-bot-chatbot > div.oc3daia-bot-chatbot-main-container.oc3daia-bot-cha
 .oc3daia-bot-chatbot button.oc3daia-bot-chatbot-speech-to-text-button {
     cursor: pointer;
     border: none;
-    background-color: #4e426d50;
+    background-color: #0C476E;
     margin-right: 10px;
     height: 40px;
     text-align: center;
@@ -275,7 +275,7 @@ div.oc3daia-bot-chatbot > div.oc3daia-bot-chatbot-main-container.oc3daia-bot-cha
     padding: 6px !important;
     box-sizing: border-box;
     background: unset;
-    color: #4e426d;
+    color: #0C476E;
     min-width:90px;
 }
 .oc3daia-bot-chatbot .oc3daia-bot-chatbot-speech-to-text-error {
@@ -293,12 +293,12 @@ div.oc3daia-bot-chatbot > div.oc3daia-bot-chatbot-main-container.oc3daia-bot-cha
 .oc3daia-bot-chatbot button.oc3daia-bot-chatbot-regenerate-response-button:disabled,
 .oc3daia-bot-chatbot button.oc3daia-bot-chatbot-send-button:disabled {
     
-    background-color: #4e426d50;
+    background-color: #0C476E;
 }
 
 .oc3daia-bot-chatbot button.oc3daia-bot-chatbot-send-button:hover {
     
-   background-color: #4e426d50;
+   background-color: #0C476E;
    color:#fff;
 }
 
@@ -309,7 +309,7 @@ div.oc3daia-bot-chatbot > div.oc3daia-bot-chatbot-main-container.oc3daia-bot-cha
 .oc3daia-bot-chatbot .oc3daia-bot-chatbot-user-message-box {
     margin-left: auto;
     color: #fff;
-    background-color: #4e426d;
+    background-color: #0C476E;
     border-radius: 10px 10px 0;
     font-size: 16px;
 }
